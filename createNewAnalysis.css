@@ -1,0 +1,116 @@
+.stepRows
+{
+    display:none;
+    width:100%;
+	max-width:95%;
+	border-style:solid;
+	border-color:#8E8282;
+	border-width:1px;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+.FullArea
+{
+    display:table;
+    background-color:#CFC;
+	min-width:1000px;
+	margin:10px;
+	padding:5px;
+	border-style:solid;
+	border-color:#8E8282;
+	border-width:2px;
+}
+
+.tableDiv
+{
+    display:table;
+}
+
+.inlineBlockDiv
+{
+    display:inline-block;
+	vertical-align:top;
+	min-width:180px;
+}
+
+.textAlignRight
+{
+	text-align:right;
+}
+
+.textAlignCenter
+{
+	text-align:center;
+}
+
+.regExpMargin
+{
+	margin-left:180;
+}
+
+.fontBold
+{
+	font-weight:bold;
+}
+
+.textAlign
+{
+	text-align:center;
+	width:95%;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+.blockDiv
+{
+    display:block;
+}
+
+.selectBox
+{
+    width:170px;
+	margin:5px;
+}
+
+.stepTitle
+{
+    width:100%;
+	max-width:95%;
+	margin-top:10px;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+.titleBorder
+{
+	display:table;
+	border-style:solid;
+	border-color:#8E8282;
+	border-width:1px;
+	border-bottom-width:0px;
+	padding-left:5px;
+	padding-right:5px;
+	background-color:#FFF;
+	color:#448;
+}
+
+.sqlText
+{
+    display:table;
+    min-width:400px;
+}
+
+.button
+{
+    width:100px;
+    margin-top:25px;
+    display:table;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+.noMargin
+{
+    margin-top:0px;
+}

@@ -1,0 +1,179 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="createNewAnalysis.css"></link>
+<script type="text/javascript" src="createNewAnalysis.js"></script>
+<script type="text/javascript">
+	window.onload = setup;
+</script>
+</head>
+<body>
+<div class="FullArea">
+	<div class="stepTitle">
+		<div class="titleBorder fontBold">
+			Choose table and field
+		</div>
+	</div>
+	<div class="stepRows" id="joinSQL"><!-- stepRows will collapse, block, width100%-->
+		<div id="joinSQLList1" class="tableDiv"> <!--layers to be added -->
+			<div class ="inlineBlockDiv"><!--div for inline-block-->
+				<div class="textAlign blockDiv"> <!-- top div for the title, block, width100% -->
+					Choose a table
+				</div>
+				<div class="tableDiv"> <!-- bottom div for the selectbox, table -->
+					<select class="selectBox" onchange="chooseTableName('1');" size="10" id="joinSQLTableList1"> <!-- selectBox class, size10, width150px -->
+					</select>
+				</div>
+			</div>
+			<div class="inlineBlockDiv">
+				<div class="blockDiv textAlign">
+					Choose a field
+				</div>
+				<div class="tableDiv">
+					<select class="selectBox" onchange="chooseFieldName('1');" size="10" id="joinSQLFieldList1">
+					</select>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="stepTitle">
+		<div class="titleBorder fontBold">
+			Choose/Build SQL Function
+		</div>
+	</div>
+	<div class="stepRows" id="functionSQL">
+		<div class="inlineBlockDiv"> <!-- div for creating function sql-->
+			<div class="sqlText"> <!-- div for holding the sql statement, inline-block, minwidth400px-->
+				<div class="inlineBlockDiv fontBold textAlignRight">
+					SQL Function:
+				</div>
+				<div class="inlineBlockDiv" id="functionLSQLSelected">
+					dsf
+				</div>
+				<!-- divs for each section, all inline
+				use classes to show color and where the cursor is
+				| character is perfect-->
+			</div>
+			<div class="tableDiv"> <!-- div for dropdowns, table -->
+				<div class="inlineBlockDiv"> <!-- div for selectbox -->
+					<div class="blockDiv textAlign">
+						Current Functions
+					</div>
+					<div class="tableDiv">
+						<select class="selectBox" ondblclick="chooseCurrentFunctionSQL();" size="10" id="functionSQLList">
+						</select>
+					</div>
+				</div>
+				<div class="inlineBlockDiv"> <!-- div for an option-->
+					<div class="blockDiv textAlign" id="functionSQLAggregateTitle">
+						Aggregate Functions
+					</div>
+					<div class="tableDiv">
+						<select class="selectBox" ondblclick="chooseAggegateFunctionSQL();" size="10" id="functionSQLAggregateList">
+						</select>
+					</div>
+				</div>
+				<div class="inlineBlockDiv">
+					<div class="blockDiv textAlign" id="functionSQLFieldTitle">
+						Possible fields
+					</div>
+					<div class="tableDiv">
+						<select class="selectBox" ondblclick="chooseFieldNameFunctionSQL();" size="10" id="functionSQLFieldList"> <!-- only number fields-->
+						</select>
+					</div>
+				</div>
+				<div class="inlineBlockDiv">
+					<div class="blockDiv textAlign" id="functionSQLArithmeticTitle">
+						Arithmetic Functions
+					</div>
+					<div class="tableDiv">
+						<select class="selectBox" ondblclick="chooseArithmeticFunctionSQL();" size="10" id="functionSQLArithmeticList">
+						</select>
+					</div>
+				</div>
+				<div class="inlineBlockDiv"> <!-- div for button -->
+					<input type="button" class="button" onclick="selectFunctionSQL();" value="Select" />
+					<input type="button" class="button" onclick="resetFunctionSQL();" value="Reset" />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="stepTitle">
+		<div class="titleBorder fontBold">
+			Choose values to be skipped
+		</div>
+	</div>
+	<div class="stepRows" id="skipList">
+		<div class="inlineBlockDiv"> <!-- div for each column, possible, buttons, selected -->
+			<div class="blockDiv textAlign">
+				Possible values to skip
+			</div>
+			<div class="tableDiv">
+				<select class="selectBox" size="10" id="skipListFieldList">
+				</select>
+			</div>
+		</div>
+		<div class="inlineBlockDiv">
+			<input type="button" class="button" onclick="addToSkipList();" value="-> Add ->" /> <!-- class for the button size, width100px, margin:15px, table -->
+			<input type="button" class="button" onclick="removeFromSkipList();" value="<- remove <-" />
+		</div>
+		<div class="inlineBlockDiv">
+			<div class="blockDiv textAlign">
+				Values being skipped
+			</div>
+			<div class="tableDiv">
+				<select class="selectBox" size="10" id="skipListSkipList">
+				</select>
+			</div>
+		</div>
+	</div>
+	<div class="stepTitle">
+		<div class="titleBorder fontBold">
+			Choose values to be consolidated into one
+		</div>
+	</div>
+	<div class="stepRows" id="consolidateList">
+		<div class="tableDiv">
+			<div class="inlineBlockDiv regExpMargin textAlignCenter">
+				Values selected<br/>by RegExp
+			</div>
+			<div class="inlineBlockDiv textAlignCenter">
+				Current Consolidated<br/>Values
+			</div>
+			<div class="inlineBlockDiv textAlignCenter">
+				Fields Consolidated<br/>by Selected
+			</div>
+		</div>
+		<div class="inlineBlockDiv"> <!-- used for adding consolidate values for all tables that use that fieldName -->
+			<div class="inlineBlockDiv"> <!-- add -->
+				<div class="button">
+					<div class="blockDiv textAlign" title="Type in here to see what values will be combined into one. Works from the start of the value. Example:
+	GE would combine GE, GECAFE, GEHOTPOINT, GEMONO, and GEPROFILE">
+						RegExp
+					</div>
+					<input type="text" id="consolidateListREGEXP" class="button noMargin" /> <!-- noMargin to remove the margins, margin:0px -->
+				</div>
+				<input type="button" class="button" onclick="addToConsolidateList();" value="Add" />
+				<div class="blockDiv textAlign" id="consolidateValueToBeUsed" title="This is the value to be used in the graphs in replacement of the original values. Example:
+	GE - ALL in replacement of GE, GECAFE, GEHOTPOINT, GEMONO, and GEPROFILE">GE - All
+				</div>
+			</div>
+			<div class="inlineBlockDiv"> <!-- values consolidated -->
+				<select class="selectBox" size="10" id="consolidateListForNewREGEXP">
+				</select>
+			</div>
+			<div class="inlineBlockDiv"> <!-- list of consolidated REGEXP added -->
+				<select class="selectBox" size="10" id="consolidateListCurrentREGEXP">
+				</select>
+			</div>
+			<div class="inlineBlockDiv"> <!-- list of values replaced by selected REGEXP -->
+				<select class="selectBox" size="10" id="consolidateListCurrentReplacedValues">
+				</select>
+			</div>
+			<div class="inlineBlockDiv"> <!-- remove selected consolidated value -->
+				<input type="button" class="button" value="Remove" onclick="consolidateRemoveCurrent();" />
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>
