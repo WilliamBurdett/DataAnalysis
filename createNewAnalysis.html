@@ -14,13 +14,17 @@
 		</div>
 	</div>
 	<div class="stepRows" id="joinSQL"><!-- stepRows will collapse, block, width100%-->
+		<div class="tableDiv">
+			<input type="button" class="inlineBlockDiv" disabled value="Select" id="selectTableNameAndField" onclick="SelectTableNameAndField();" />
+			<input type="button" class="inlineBlockDiv" value="Reset" onclick="resetTableNameAndField();" />
+		</div>
 		<div id="joinSQLList1" class="tableDiv"> <!--layers to be added -->
 			<div class ="inlineBlockDiv"><!--div for inline-block-->
 				<div class="textAlign blockDiv"> <!-- top div for the title, block, width100% -->
 					Choose a table
 				</div>
 				<div class="tableDiv"> <!-- bottom div for the selectbox, table -->
-					<select class="selectBox" onchange="chooseTableName('1');" size="10" id="joinSQLTableList1"> <!-- selectBox class, size10, width150px -->
+					<select class="selectBox" onchange="chooseTableName(1);" size="10" id="joinSQLTableList1"> <!-- selectBox class, size10, width150px -->
 					</select>
 				</div>
 			</div>
@@ -29,7 +33,7 @@
 					Choose a field
 				</div>
 				<div class="tableDiv">
-					<select class="selectBox" onchange="chooseFieldName('1');" size="10" id="joinSQLFieldList1">
+					<select class="selectBox" onchange="chooseFieldName(1);" size="10" id="joinSQLFieldList1">
 					</select>
 				</div>
 			</div>
@@ -46,9 +50,7 @@
 				<div class="inlineBlockDiv fontBold textAlignRight">
 					SQL Function:
 				</div>
-				<div class="inlineBlockDiv" id="functionLSQLSelected">
-					dsf
-				</div>
+				<div class="inlineBlockDiv" id="functionLSQLSelected"></div>
 				<!-- divs for each section, all inline
 				use classes to show color and where the cursor is
 				| character is perfect-->
@@ -68,7 +70,7 @@
 						Aggregate Functions
 					</div>
 					<div class="tableDiv">
-						<select class="selectBox" ondblclick="chooseAggegateFunctionSQL();" size="10" id="functionSQLAggregateList">
+						<select class="selectBox" ondblclick="chooseAggregateFunctionSQL();" size="10" id="functionSQLAggregateList">
 						</select>
 					</div>
 				</div>
@@ -108,7 +110,7 @@
 				Possible values to skip
 			</div>
 			<div class="tableDiv">
-				<select class="selectBox" size="10" id="skipListFieldList">
+				<select class="selectBox" size="10" id="skipListNewValues">
 				</select>
 			</div>
 		</div>
@@ -121,7 +123,7 @@
 				Values being skipped
 			</div>
 			<div class="tableDiv">
-				<select class="selectBox" size="10" id="skipListSkipList">
+				<select class="selectBox" size="10" id="skipListCurrentValues">
 				</select>
 			</div>
 		</div>
@@ -150,7 +152,7 @@
 	GE would combine GE, GECAFE, GEHOTPOINT, GEMONO, and GEPROFILE">
 						RegExp
 					</div>
-					<input type="text" id="consolidateListREGEXP" class="button noMargin" /> <!-- noMargin to remove the margins, margin:0px -->
+					<input type="text" onchange="consolidateListShowForNew();" id="consolidateListREGEXP" class="button noMargin" /> <!-- noMargin to remove the margins, margin:0px -->
 				</div>
 				<input type="button" class="button" onclick="addToConsolidateList();" value="Add" />
 				<div class="blockDiv textAlign" id="consolidateValueToBeUsed" title="This is the value to be used in the graphs in replacement of the original values. Example:

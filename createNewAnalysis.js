@@ -1,8 +1,12 @@
 var maxJoinSQLList = 1;
 var bracketOpen=false;
 var lastStep="start";
+var globalTableName="";
+var globalFieldName="";
+var tableList = [];
 
 function setup(){
+	//fillTableList();
 	showSection("joinSQL");
 	showSection("functionSQL");
 	showSection("skipList");
@@ -14,55 +18,111 @@ function setup(){
 	switchTitles("functionSQLAggregateTitle", "functionSQLAggregateTitle");
 }
 
+function resetTableNameAndField(){
+	resetBelowJoinSQL();
+	removeExtraJoinSQLTables(1);
+	resetTableList();
+	clearSelectBox("joinSQLFieldList1");
+	document.getElementById("selectTableNameAndField").disabled=true;
+}
+
+function resetTableList(){
+	var i;
+	for(i=0;i<tableList.length;++i){
+		tableList[i].used=false;
+	}
+}
+
 function resetFunctionSQL(){
 	bracketOpen=false;
 	lastStep="start";
 }
 
-//Choose table and field functions
-function chooseTableName(idNum){
-	resetBelowJoinSQL();
-	removeExtraJoinSQLTables(idNum);
-	clearSelectBox("joinSQLFieldList" + idNum);
-	var tableName = getSelectedValue("joinSQLTableList" + idNum);
-	var send = "tableName=" + tableName;
-	var sendTo = "/ALANew/DataVisualization/Scripts/chooseTableName.php";
+function fillTableNames(){
+	var i;
+	for(i=0;i<tableList.length;++i){
+		addOption("joinSQLTableList1", tableList[i].tableName, tableList[i].tableName);
+	}
+}
+
+function fillTableList(){
+	var send = "";
+	var sendTo = "/ALANew/DataVisualization/Scripts/fillTableList.php";
 	pingServer(send, sendTo);
 }
 
+//Choose table and field functions
+function chooseTableName(idNum){
+	clearSelectBox("joinSQLFieldList" + idNum);
+	var tableName = getSelectedValue("joinSQLTableList" + idNum);
+	var table = 0;
+	var i;
+	for(i=0;i<tableList.length;++i){
+		if(tableList[i].tableName==tableName){
+			table = tableList[i];
+		}
+	}
+	for(i=0;i<table.fieldList.length;++i){
+		addOption("joinSQLTableList" + idNum, table.fieldList[i],table.fieldList[index]);
+	}
+	if(idNum==1){
+		globalTableName=tableName;
+	}
+}
+
 function chooseFieldName(idNum){
-	resetBelowJoinSQL();
-	removeExtraJoinSQLTables(idNum);
-	
 	if(fieldBox.selectedIndex>=0){
 		var tableName = getSelectedValue("joinSQLTableList" + idNum);
 		var fieldName = getSelectedValue("joinSQLFieldList" + idNum);
+		document.getElementById("joinSQLTableList" + idNum).disabled=true;
+		document.getElementById("joinSQLFieldList" + idNum).disabled=true;
 		if(tableName!="AR_InvoiceHistoryHeader"){
+			
+			//add new html for new select boxes
 			var stepRow = document.getElementById("joinSQL");
 			var newIdNum = idNum+1;
 			var base = document.getElementById("joinSQLList1");
 			var newStucture = base.cloneNode(true);
 			newStructure.setAttribute("id", "joinSQLList" + newIdNum);
+			newStructure.getElementById("joinSQLTableList" + idNum).setAttribute("onchange", "chooseTableName(" + newIdNum + ");");
+			newStructure.getElementById("joinSQLFieldList" + idNum).setAttribute("onchange", "chooseFieldName(" + newIdNum + ");");
 			newStructure.getElementById("joinSQLTableList" + idNum).setAttribute("id", "joinSQLTableList" + newIdNum);
 			newStructure.getElementById("joinSQLFieldList" + idNum).setAttribute("id", "joinSQLFieldList" + newIdNum);
-			newStructure.getElementById("joinSQLTableList" + idNum).setAttribute("onchange", "chooseTableName('" + newIdNum + "');");
-			newStructure.getElementById("joinSQLFieldList" + idNum).setAttribute("onchange", "chooseFieldName('" + newIdNum + "');");
+			clearSelectBox("joinSQLTableList" + newIdNum);
+			clearSelectBox("joinSQLFieldList" + newIdNum);
 			stepRow.appendChild(newStructure);
-			var send = "tableName=" + tableName + "&fieldName=" + fieldName + "&idNum=" + idNum;
-			var sendTo = "/ALANew/DataVisualization/Scripts/chooseFieldName.php";
-			maxJoinSQLList=newIdNum;
-			pingServer(send, sendTo);
+			
+			//loops through to find tables with that field
+			var i;
+			var j;
+			var check=false;
+			for(i=0;i<tableList.length;++i){
+				for(j=0;j<tableList[i].fieldList.length;++j){
+					if(tableList[i].fieldList[j]==fieldName){
+						if(tableList[i].tableName!=tableName){
+							check=true;
+						}
+					}
+				}
+				if(check===true){
+					addOption("joinSQLTableList" + newIdNum, tableList[i].tableName,tableList[i].tableName);
+					check=false;
+				}
+			}
 		}
 		else{
-			showSection("functionSQL");
+			document.getElementById("selectTableNameAndField").disabled=false;
+		}
+		if(idNum=='1'){
+			globalFieldName=fieldName;
 		}
 	}
 }
 
 function resetBelowJoinSQL(){
 	deselectSelectBox("functionSQLList");
-	deselectSelectBox("skipListFieldList");
-	deselectSelectBox("skipListSkipList");
+	deselectSelectBox("skipListNewValues");
+	deselectSelectBox("skipListCurrentValues");
 	deselectSelectBox("consolidateListForNewREGEXP");
 	deselectSelectBox("consolidateListCurrentREGEXP");
 	deselectSelectBox("consolidateListCurrentReplacedValues");
@@ -89,33 +149,33 @@ function chooseAggregateFunctionSQL(){
 		appendToFunctionSQL(value + "(");
 		switchTitles("functionSQLAggregateTitle", "functionSQLFieldTitle");
 	}
-	else if(lastStep="Aggregate"){
+	else if(lastStep=="Aggregate"){
 		alert("You must place a field within the last Aggregate function.");
 	}
-	else if(lastStep="closeBracket" || lastStep="Field"){
+	else if(lastStep=="closeBracket" || lastStep=="Field"){
 		alert("You must place an Arithmetic function before an additional aggregate function.");
 	}
 }
 
 function switchTitles(currentId, nextId){
 	var currentTitle = document.getElementById(currentId);
-	currentTitle.className = currentTitle.className.replace( /(?:^|\s)fontBold(?!\S)/g , '' )
+	currentTitle.className = currentTitle.className.replace( /(?:^|\s)fontBold(?!\S)/g , '' );
 	var nextTitle = document.getElementById(nextId);
 	nextTitle.className += " fontBold";
 }
 
 function fillAggregateFunctionSQL(){
 	var id = "functionSQLAggregateList";
-	addOption(id, "SUM", "Sum");
-	addOption(id, "AVG", "Average");
-	addOption(id, "COUNT", "Count");
+	addOption(id, "Sum", "SUM");
+	addOption(id, "Average", "AVG");
+	addOption(id, "Count", "COUNT");
 }
 
 function chooseCurrentFunctionSQL(){
 	var functionSQLList = document.getElementById("functionSQLList");
 	var functionSQL = functionSQLList.options[functionSQLList.selectedIndex].value;
 	var functionSQLSelected = document.getElementById("functionLSQLSelected");
-	functionSQLSelected.innerHTML = funcionSQL;
+	functionSQLSelected.innerHTML = functionSQL;
 	lastStep="finished";
 }
 
@@ -130,7 +190,7 @@ function appendToFunctionSQL(text){
 	var functionSQLSelected = document.getElementById("functionLSQLSelected");
 	var functionSQL=functionSQLSelected.innerHTML;
 	functionSQL+=text;
-	functionSQLSelected.innerHTML = funcionSQL;
+	functionSQLSelected.innerHTML = functionSQL;
 }
 
 function chooseFieldNameFunctionSQL(){
@@ -143,10 +203,10 @@ function chooseFieldNameFunctionSQL(){
 		appendToFunctionSQL(value + ")");
 		switchTitles("functionSQLFieldTitle", "functionSQLArithmeticTitle");
 	}
-	else if(lastStep="start" || lastStep="openBracket" || lastStep="Arithmetic" || lastStep="closeBracket"{
+	else if(lastStep=="start" || lastStep=="openBracket" || lastStep=="Arithmetic" || lastStep=="closeBracket"){
 		alert("You must place an Aggregate function before placing a field.");
 	}
-	else if(lastStep="Field"){
+	else if(lastStep=="Field"){
 		alert("You must place an Arithmetic function then Aggregate or Brackets before placing a field.");
 	}
 }
@@ -157,7 +217,7 @@ function chooseArithmeticFunctionSQL(){
 	}
 	var value=getSelectedValue("functionSQLArithmeticList");
 	if(value==")"){ // comes after field
-		if(bracketOpen==false || lastStep=="start"){
+		if(bracketOpen===false || lastStep=="start"){
 			alert("You can't place a closed bracket without having an open one.");
 		}
 		else if(lastStep=="closeBracket"){
@@ -178,7 +238,7 @@ function chooseArithmeticFunctionSQL(){
 		}
 	}
 	else if(value=="("){ // comes after arithmetic or start
-		if(bracketOpen==true || lastStep=="openBracket"){
+		if(bracketOpen===true || lastStep=="openBracket"){
 			alert("You can only have one set of brackets at a time.");
 		}
 		else if(lastStep=="closeBracket"){
@@ -223,7 +283,7 @@ function fillArithmeticFunctionSQL(){
 }
 
 function selectFunctionSQL(){
-	if(bracketOpen==true){
+	if(bracketOpen===true){
 		alert("You must close the bracket set before finishing.");
 	}
 	else if(lastStep=="Aggregate"){
@@ -243,21 +303,75 @@ function selectFunctionSQL(){
 	}
 }
 
+function setupSkipAndConsolidateList(){
+	fillSkipListCurrentValues();
+	fillSkipListNewValues();
+	fillConsolidateList();
+}
+
 //skipList and consolidate list
+function fillSkipListCurrentValues(){
+	var id = "skipListCurrentValues";
+	clearSelectBox(id);
+	var send = "tableName=" + globalTableName + "&fieldName=" + globalFieldName + "&id=" + id;
+	var sendTo = "/ALANew/DataVisualization/Scripts/fillSkipListCurrentValues.php";
+	pingServer(send, sendTo);
+}
+
+function fillSkipListNewValues(){
+	var id = "skipListNewValues";
+	clearSelectBox(id);
+	var send = "tableName=" + globalTableName + "&fieldName=" + globalFieldName + "&id=" + id;
+	var sendTo = "/ALANew/DataVisualization/Scripts/fillSkipListNewValues.php";
+	pingServer(send, sendTo);
+}
+
+function fillConsolidateList(){
+	var id = "consolidateListCurrentREGEXP";
+	clearSelectBox(id);
+	var send = "tableName=" + globalTableName + "&fieldName=" + globalFieldName + "&id=" + id;
+	var sendTo = "/ALANew/DataVisualization/Scripts/fillConsolidateList.php";
+	pingServer(send, sendTo);
+}
+
 function addToSkipList(){
-	
+	var value = getSelectedValue("skipListNewValues");
+	var send = "tableName=" + globalTableName + "&fieldName=" + globalFieldName + "&value=" + value;
+	var sendTo = "/ALANew/DataVisualization/Scripts/addToSkipList.php";
+	pingServer(send, sendTo);
+	setupSkipAndConsolidateList();
 }
 
 function removeFromSkipList(){
-	
+	var value = getSelectedValue("skipListCurrentValues");
+	var send = "tableName=" + globalTableName + "&fieldName=" + globalFieldName + "&value=" + value;
+	var sendTo = "/ALANew/DataVisualization/Scripts/removeFromSkipList.php";
+	pingServer(send, sendTo);
+	setupSkipAndConsolidateList();
 }
 
 function addToConsolidateList(){
-	
+	var value = document.getElementById("consolidateListREGEXP").value;
+	var send = "tableName=" + globalTableName + "&fieldName=" + globalFieldName + "&value=" + value;
+	var sendTo = "/ALANew/DataVisualization/Scripts/addToConsolidateList.php";
+	pingServer(send, sendTo);
+	setupSkipAndConsolidateList();
 }
 
 function removeFromConsolidateList(){
-	
+	var value = getSelectedValue("consolidateListCurrentREGEXP");
+	var send = "tableName=" + globalTableName + "&fieldName=" + globalFieldName + "&value=" + value;
+	var sendTo = "/ALANew/DataVisualization/Scripts/removeFromConsolidateList.php";
+	pingServer(send, sendTo);
+	setupSkipAndConsolidateList();
+}
+
+function consolidateListShowForNew(){
+	var value = document.getElementById("consolidateListREGEXP").value;
+	var id = "consolidateListForNewREGEXP";
+	var send = "tableName=" + globalTableName + "&fieldName=" + globalFieldName + "&value=" + value + "&id=" + id;
+	var sendTo = "/ALANew/DataVisualization/Scripts/addToConsolidateList.php";
+	pingServer(send, sendTo);
 }
 
 //Generic Functions
