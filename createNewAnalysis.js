@@ -18,6 +18,7 @@ function setup(){
 	switchTitles("functionSQLAggregateTitle", "functionSQLAggregateTitle");
 }
 
+
 function resetTableNameAndField(){
 	resetBelowJoinSQL();
 	removeExtraJoinSQLTables(1);
