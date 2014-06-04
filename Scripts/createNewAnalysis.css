@@ -1,20 +1,19 @@
 .stepRows
 {
-    display:none;
-    width:100%;
+    display:table;
 	max-width:95%;
 	border-style:solid;
 	border-color:#8E8282;
 	border-width:1px;
 	margin-left:auto;
 	margin-right:auto;
+	float:left;
 }
 
 .FullArea
 {
     display:table;
     background-color:#CFC;
-	min-width:1000px;
 	margin:10px;
 	padding:5px;
 	border-style:solid;
@@ -75,6 +74,7 @@
 
 .stepTitle
 {
+	float:left;
     width:100%;
 	max-width:95%;
 	margin-top:10px;

@@ -12,7 +12,7 @@ db.query(tableSQL)
 table = db.use_result()[0]
 
 #Used to find values to be consolidated
-consolidationSQL = """select * from consolidationList where fieldName='""" + table[1] + """'""")
+consolidationSQL = """select value from consolidationList where fieldName='""" + table[1] + """'""")
 db.query(consolidationSQL)
 consolidationList = db.store_result()[0]
 consolidationSQL = """ """
@@ -20,7 +20,7 @@ for value in consolidationList:
 	consolidationSQL += """ AND """ + table[1] + """ NOT REGEXP '^""" + value """' """
 
 #used to find values to be skipped
-skipSQL = """select * from skipList where fieldName='""" + table[1] + """'""")
+skipSQL = """select value from skipList where fieldName='""" + table[1] + """'""")
 db.query(skipSQL)
 skipList = db.store_result()[0]
 skipSQL = """ """

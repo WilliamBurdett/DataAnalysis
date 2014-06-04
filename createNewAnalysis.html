@@ -1,7 +1,7 @@
 <html>
 <head>
-<link rel="stylesheet" type="text/css" href="createNewAnalysis.css"></link>
-<script type="text/javascript" src="createNewAnalysis.js"></script>
+<link rel="stylesheet" type="text/css" href="Scripts/createNewAnalysis.css"></link>
+<script type="text/javascript" src="Scripts/createNewAnalysis.js"></script>
 <script type="text/javascript">
 	window.onload = setup;
 </script>
@@ -18,13 +18,13 @@
 			<input type="button" class="inlineBlockDiv" disabled value="Select" id="selectTableNameAndField" onclick="SelectTableNameAndField();" />
 			<input type="button" class="inlineBlockDiv" value="Reset" onclick="resetTableNameAndField();" />
 		</div>
-		<div id="joinSQLList1" class="tableDiv"> <!--layers to be added -->
+		<div class="tableDiv"> <!--layers to be added -->
 			<div class ="inlineBlockDiv"><!--div for inline-block-->
 				<div class="textAlign blockDiv"> <!-- top div for the title, block, width100% -->
 					Choose a table
 				</div>
 				<div class="tableDiv"> <!-- bottom div for the selectbox, table -->
-					<select class="selectBox" onchange="chooseTableName(1);" size="10" id="joinSQLTableList1"> <!-- selectBox class, size10, width150px -->
+					<select class="selectBox" onchange="chooseTableName();" size="10" id="joinSQLTableList"> <!-- selectBox class, size10, width150px -->
 					</select>
 				</div>
 			</div>
@@ -33,7 +33,7 @@
 					Choose a field
 				</div>
 				<div class="tableDiv">
-					<select class="selectBox" onchange="chooseFieldName(1);" size="10" id="joinSQLFieldList1">
+					<select class="selectBox" onchange="chooseFieldName();" size="10" id="joinSQLFieldList">
 					</select>
 				</div>
 			</div>
@@ -152,7 +152,7 @@
 	GE would combine GE, GECAFE, GEHOTPOINT, GEMONO, and GEPROFILE">
 						RegExp
 					</div>
-					<input type="text" onchange="consolidateListShowForNew();" id="consolidateListREGEXP" class="button noMargin" /> <!-- noMargin to remove the margins, margin:0px -->
+					<input type="text" onkeyup="consolidateListShowForNew();" id="consolidateListREGEXP" class="button noMargin" /> <!-- noMargin to remove the margins, margin:0px -->
 				</div>
 				<input type="button" class="button" onclick="addToConsolidateList();" value="Add" />
 				<div class="blockDiv textAlign" id="consolidateValueToBeUsed" title="This is the value to be used in the graphs in replacement of the original values. Example:
@@ -164,7 +164,7 @@
 				</select>
 			</div>
 			<div class="inlineBlockDiv"> <!-- list of consolidated REGEXP added -->
-				<select class="selectBox" size="10" id="consolidateListCurrentREGEXP">
+				<select class="selectBox" onchange="consolidateListViewCurrentREGEXP();" size="10" id="consolidateListCurrentREGEXP">
 				</select>
 			</div>
 			<div class="inlineBlockDiv"> <!-- list of values replaced by selected REGEXP -->
@@ -172,9 +172,17 @@
 				</select>
 			</div>
 			<div class="inlineBlockDiv"> <!-- remove selected consolidated value -->
-				<input type="button" class="button" value="Remove" onclick="consolidateRemoveCurrent();" />
+				<input type="button" class="button" value="Remove" onclick="removeFromConsolidateList();" />
 			</div>
 		</div>
+	</div>
+	<div class="stepTitle">
+		<div class="titleBorder fontBold">
+			Finish Button
+		</div>
+	</div>
+	<div class="stepRows" id="FinishButton">
+		<input type="button" class="inlineBlockDiv" value="Finish" onclick="saveEverything();">
 	</div>
 </div>
 </body>

@@ -1,0 +1,62 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="Scripts/createNewAnalysis.css"></link>
+<script type="text/javascript" src="Scripts/createNewAnalysis.js"></script>
+<script type="text/javascript" src="Scripts/addField.js"></script>
+<script type="text/javascript">
+	window.onload = setup;
+</script>
+</head>
+<body>
+<div class="FullArea">
+	<div class="stepTitle">
+		<div class="titleBorder fontBold">
+			Remove Current Analysed Fields
+		</div>
+	</div>
+	<div class="stepRows" id="joinSQL"><!-- stepRows will collapse, block, width100%-->
+		<div class="tableDiv"> <!--layers to be added -->
+			<div class ="inlineBlockDiv"><!--div for inline-block-->
+				<div class="tableDiv"> <!-- bottom div for the selectbox, table -->
+					<select class="selectBox" style="width:350px;" size="10" id="currentFields"> <!-- selectBox class, size10, width150px -->
+					</select>
+				</div>
+			</div>
+			<div class ="inlineBlockDiv"><!--div for inline-block-->
+				<input type="button" class="inlineBlockDiv" value="Remove Field" onclick="removeCurrentField();">
+			</div>
+		</div>
+	</div>
+	<div class="stepTitle">
+		<div class="titleBorder fontBold">
+			Add New Analysed Fields
+		</div>
+	</div>
+	<div class="stepRows" id="joinSQL"><!-- stepRows will collapse, block, width100%-->
+		<div class="tableDiv"> <!--layers to be added -->
+			<div class ="inlineBlockDiv"><!--div for inline-block-->
+				<div class="textAlign blockDiv"> <!-- top div for the title, block, width100% -->
+					Choose a table
+				</div>
+				<div class="tableDiv"> <!-- bottom div for the selectbox, table -->
+					<select class="selectBox" onchange="chooseTableName();" size="10" id="newTable"> <!-- selectBox class, size10, width150px -->
+					</select>
+				</div>
+			</div>
+			<div class="inlineBlockDiv">
+				<div class="blockDiv textAlign">
+					Choose a field
+				</div>
+				<div class="tableDiv">
+					<select class="selectBox" size="10" id="newField">
+					</select>
+				</div>
+			</div>
+			<div class ="inlineBlockDiv"><!--div for inline-block-->
+				<input type="button" class="inlineBlockDiv" value="Add Field" onclick="addNewField();">
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>
