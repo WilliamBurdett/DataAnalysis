@@ -21,6 +21,10 @@
 	border-width:2px;
 }
 
+.noDisplay{
+	display:none;
+}
+
 .tableDiv
 {
     display:table;
@@ -30,6 +34,11 @@
 {
     display:inline-block;
 	vertical-align:top;
+	min-width:180px;
+}
+
+.widthMin
+{
 	min-width:180px;
 }
 

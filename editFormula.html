@@ -1,0 +1,100 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="Scripts/createNewAnalysis.css"></link>
+<script type="text/javascript" src="Scripts/createNewAnalysis.js"></script>
+<script type="text/javascript" src="Scripts/Formula/editFormula.js"></script>
+<script type="text/javascript">
+	window.onload = setup;
+</script>
+</head>
+<body>
+<div class="FullArea">
+	<div class="stepTitle">
+		<div class="titleBorder fontBold">
+			Remove Current Formulas
+		</div>
+	</div>
+	<div class="stepRows" id="joinSQL"><!-- stepRows will collapse, block, width100%-->
+		<div class="tableDiv"> <!--layers to be added -->
+			<div class ="inlineBlockDiv"><!--div for inline-block-->
+				<div class="tableDiv"> <!-- bottom div for the selectbox, table -->
+					<select class="selectBox" style="width:530px;" size="10" id="currentFormulas"> <!-- selectBox class, size10, width150px -->
+					</select>
+				</div>
+			</div>
+			<div class ="inlineBlockDiv"><!--div for inline-block-->
+				<input type="button" class="inlineBlockDiv" value="Remove Formula" onclick="removeCurrentFormula();">
+			</div>
+		</div>
+	</div>
+	<div class="stepTitle">
+		<div class="titleBorder fontBold">
+			Choose/Build SQL Formula
+		</div>
+	</div>
+	<div class="stepRows" id="formulaSQL">
+		<div class="inlineBlockDiv"> <!-- div for creating formula sql-->
+			<div class="sqlText"> <!-- div for holding the sql statement, inline-block, minwidth400px-->
+				<div class="inlineBlockDiv fontBold textAlignRight">
+					SQL Formula:
+				</div>
+				<div class="inlineBlockDiv" id="formulaLSQLSelected"></div>
+				<!-- divs for each section, all inline
+				use classes to show color and where the cursor is
+				| character is perfect-->
+			</div>
+			<div class="tableDiv"> <!-- div for dropdowns, table -->
+				<div class="inlineBlockDiv"> <!-- div for an option-->
+					<div class="blockDiv textAlign" id="formulaSQLAggregateTitle">
+						Aggregate Formulas
+					</div>
+					<div class="tableDiv">
+						<select class="selectBox" ondblclick="chooseAggregateFormulaSQL();" size="10" id="formulaSQLAggregateList">
+						</select>
+					</div>
+				</div>
+				<div class="inlineBlockDiv">
+					<div class="blockDiv textAlign" id="formulaSQLFieldTitle">
+						Possible fields
+					</div>
+					<div class="tableDiv">
+						<select class="selectBox" ondblclick="chooseFieldNameFormulaSQL();" size="10" id="formulaSQLFieldList"> <!-- only number fields-->
+						</select>
+					</div>
+				</div>
+				<div class="inlineBlockDiv">
+					<div class="blockDiv textAlign" id="formulaSQLArithmeticTitle">
+						Arithmetic Formulas
+					</div>
+					<div class="tableDiv">
+						<select class="selectBox" ondblclick="chooseArithmeticFormulaSQL();" size="10" id="formulaSQLArithmeticList">
+						</select>
+					</div>
+				</div>
+				<div class="inlineBlockDiv"> <!-- div for button -->
+					<div class="blockDiv textAlign">
+						Formula Name
+					</div>
+					<input type="text" class="blockDiv widthMin" id="formulaName" />
+					<input type="button" class="blockDiv widthMin" onclick="selectFormulaSQL();" value="Add" />
+					<input type="button" class="blockDiv widthMin" onclick="resetFormulaSQL();" value="Reset" />
+					<div class="blockDiv widthMin">
+					<table>
+						<tr>
+							<td>Decimal Form</td>
+							<td><input type="radio" id="formulaDecimalRadio" /></td>
+						</tr>
+						<tr>
+							<td>Dollar Amount</td>
+							<td><input type="radio" id="formulaDollarRadio" /></td>
+						</tr>
+					</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="lastText"></div>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="Scripts/createNewAnalysis.css"></link>
+<script type="text/javascript" src="Scripts/createNewAnalysis.js"></script>
+<script type="text/javascript" src="Scripts/SkipAndConsolidate/editSkipAndConsolidate.js"></script>
+<script type="text/javascript">
+	window.onload = setup;
+</script>
+</head>
+<body>
+<div class="FullArea">
+	<div class="stepTitle">
+		<div class="titleBorder fontBold">
+			Current Analysed Fields
+		</div>
+	</div>
+	<div class="stepRows" id="joinSQL"><!-- stepRows will collapse, block, width100%-->
+		<div class ="inlineBlockDiv"><!--div for inline-block-->
+			<div class="blockDiv textAlign">
+					Double Click to fill the screen
+			</div>
+			<div class="tableDiv"> <!-- bottom div for the selectbox, table -->
+				<select class="selectBox" style="width:350px;" size="10" ondblclick="chooseField();" id="currentFields"> <!-- selectBox class, size10, width150px -->
+				</select>
+			</div>
+		</div>
+		<div class ="inlineBlockDiv"><!--div for inline-block-->
+			<div class="blockDiv textAlign">
+					Current Distinct Values
+			</div>
+			<div class="tableDiv"> <!-- bottom div for the selectbox, table -->
+				<select class="selectBox" disabled size="10" id="distinctValues"> <!-- selectBox class, size10, width150px -->
+				</select>
+			</div>
+		</div>
+	</div>
+	<div class="stepTitle">
+		<div class="titleBorder fontBold">
+			Choose values to be skipped
+		</div>
+	</div>
+	<div class="stepRows" id="skipList">
+		<div class="inlineBlockDiv"> <!-- div for each column, possible, buttons, selected -->
+			<div class="blockDiv textAlign">
+				Possible values to skip
+			</div>
+			<div class="tableDiv">
+				<select class="selectBox" size="10" id="skipListPossibleValues">
+				</select>
+			</div>
+		</div>
+		<div class="inlineBlockDiv">
+			<input type="button" class="button" onclick="addToSkipList();" value="-> Add ->" /> <!-- class for the button size, width100px, margin:15px, table -->
+			<input type="button" class="button" onclick="removeFromSkipList();" value="<- remove <-" />
+		</div>
+		<div class="inlineBlockDiv">
+			<div class="blockDiv textAlign">
+				Values being skipped
+			</div>
+			<div class="tableDiv">
+				<select class="selectBox" size="10" id="skipListCurrentValues">
+				</select>
+			</div>
+		</div>
+	</div>
+	<div class="stepTitle">
+		<div class="titleBorder fontBold">
+			Choose values to be consolidated into one
+		</div>
+	</div>
+	<div class="stepRows" id="consolidateList">
+		<div class="tableDiv">
+			<div class="inlineBlockDiv regExpMargin textAlignCenter">
+				Values selected<br/>by RegExp
+			</div>
+			<div class="inlineBlockDiv textAlignCenter">
+				Current Consolidated<br/>Values
+			</div>
+			<div class="inlineBlockDiv textAlignCenter">
+				Fields Consolidated<br/>by Selected
+			</div>
+		</div>
+		<div class="inlineBlockDiv"> <!-- used for adding consolidate values for all tables that use that fieldName -->
+			<div class="inlineBlockDiv"> <!-- add -->
+				<div class="button">
+					<div class="blockDiv textAlign" title="Type in here to see what values will be combined into one. Works from the start of the value. Example:
+	GE would combine GE, GECAFE, GEHOTPOINT, GEMONO, and GEPROFILE">
+						RegExp
+					</div>
+					<input type="text" onkeyup="consolidateListViewNew();" id="consolidateListREGEXP" class="button noMargin" /> <!-- noMargin to remove the margins, margin:0px -->
+				</div>
+				<input type="button" class="button" onclick="addToConsolidateList();" value="Add" />
+				<div class="blockDiv textAlign" id="consolidateValueToBeUsed" title="This is the value to be used in the graphs in replacement of the original values. Example:
+	GE - ALL in replacement of GE, GECAFE, GEHOTPOINT, GEMONO, and GEPROFILE">GE - All
+				</div>
+			</div>
+			<div class="inlineBlockDiv"> <!-- values consolidated -->
+				<select class="selectBox" disabled size="10" id="consolidateListViewNewMatchList">
+				</select>
+			</div>
+			<div class="inlineBlockDiv"> <!-- list of consolidated REGEXP added -->
+				<select class="selectBox" onchange="consolidateListViewCurrentREGEXP();" size="10" id="consolidateListCurrentValue">
+				</select>
+			</div>
+			<div class="inlineBlockDiv"> <!-- list of values replaced by selected REGEXP -->
+				<select class="selectBox" disabled size="10" id="consolidateListCurrentMatchList">
+				</select>
+			</div>
+			<div class="inlineBlockDiv"> <!-- remove selected consolidated value -->
+				<input type="button" class="button" value="Remove" onclick="removeFromConsolidateList();" />
+			</div>
+		</div>
+	</div>
+</div>
+<div id="lastText"></div>
+</body>
+</html>

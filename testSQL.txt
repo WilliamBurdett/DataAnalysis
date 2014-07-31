@@ -1,0 +1,176 @@
+create table IF NOT EXISTS Category3CI_ItemMargin (formulaValue decimal(11,9), fieldValue VARCHAR(50), dateSelected DATE)
+update formula_list set newFormula='No' where formula_id=1
+create table IF NOT EXISTS SalespersonNoAR_InvoiceHistoryHeaderMargin (formulaValue decimal(11,9), fieldValue VARCHAR(50), dateSelected DATE)
+update formula_list set newFormula='No' where formula_id=1
+create table IF NOT EXISTS UDF_STOREAR_InvoiceHistoryHeaderMargin (formulaValue decimal(11,9), fieldValue VARCHAR(50), dateSelected DATE)
+update formula_list set newFormula='No' where formula_id=1
+insert into Category3CI_ItemMargin (formulaValue, fieldValue, dateSelected)
+select SUM(TaxableSalesAmt)+SUM(NonTaxableSalesAmt)-SUM(CostOfSalesAmt), CI_Item.Category3, InvoiceDate from mas.ar_invoicehistorydetail
+join mas.ar_invoicehistoryheader on mas.ar_invoicehistorydetail.InvoiceNo=ar_invoicehistoryheader.InvoiceNo and mas.ar_invoicehistorydetail.HeaderSeqNo=mas.ar_invoicehistoryheader.HeaderSeqNo
+join mas.ci_item on mas.ar_invoicehistorydetail.ItemCode=mas.ci_item.ItemCode
+where InvoiceDate>='2014-06-16' and CI_Item.Category3<>''  and CI_Item.Category3 NOT REGEXP '^FRIG'  and CI_Item.Category3 NOT REGEXP '^GE'  and CI_Item.Category3 NOT REGEXP '^MIELE'  and CI_Item.Category3 NOT REGEXP '^BOSCH' 
+group by InvoiceDate, CI_Item.Category3
+insert into Category3CI_ItemMargin (formulaValue, fieldValue, dateSelected)
+select SUM(TaxableSalesAmt)+SUM(NonTaxableSalesAmt)-SUM(CostOfSalesAmt), 'FRIG - All', InvoiceDate from mas.ar_invoicehistorydetail
+join mas.ar_invoicehistoryheader on mas.ar_invoicehistorydetail.InvoiceNo=ar_invoicehistoryheader.InvoiceNo and mas.ar_invoicehistorydetail.HeaderSeqNo=mas.ar_invoicehistoryheader.HeaderSeqNo
+join mas.ci_item on mas.ar_invoicehistorydetail.ItemCode=mas.ci_item.ItemCode
+where InvoiceDate>='2014-06-16' and CI_Item.Category3<>'' and CI_Item.Category3 REGEXP '^FRIG'
+group by InvoiceDate
+insert into Category3CI_ItemMargin (formulaValue, fieldValue, dateSelected)
+select SUM(TaxableSalesAmt)+SUM(NonTaxableSalesAmt)-SUM(CostOfSalesAmt), 'GE - All', InvoiceDate from mas.ar_invoicehistorydetail
+join mas.ar_invoicehistoryheader on mas.ar_invoicehistorydetail.InvoiceNo=ar_invoicehistoryheader.InvoiceNo and mas.ar_invoicehistorydetail.HeaderSeqNo=mas.ar_invoicehistoryheader.HeaderSeqNo
+join mas.ci_item on mas.ar_invoicehistorydetail.ItemCode=mas.ci_item.ItemCode
+where InvoiceDate>='2014-06-16' and CI_Item.Category3<>'' and CI_Item.Category3 REGEXP '^GE'
+group by InvoiceDate
+insert into Category3CI_ItemMargin (formulaValue, fieldValue, dateSelected)
+select SUM(TaxableSalesAmt)+SUM(NonTaxableSalesAmt)-SUM(CostOfSalesAmt), 'MIELE - All', InvoiceDate from mas.ar_invoicehistorydetail
+join mas.ar_invoicehistoryheader on mas.ar_invoicehistorydetail.InvoiceNo=ar_invoicehistoryheader.InvoiceNo and mas.ar_invoicehistorydetail.HeaderSeqNo=mas.ar_invoicehistoryheader.HeaderSeqNo
+join mas.ci_item on mas.ar_invoicehistorydetail.ItemCode=mas.ci_item.ItemCode
+where InvoiceDate>='2014-06-16' and CI_Item.Category3<>'' and CI_Item.Category3 REGEXP '^MIELE'
+group by InvoiceDate
+insert into Category3CI_ItemMargin (formulaValue, fieldValue, dateSelected)
+select SUM(TaxableSalesAmt)+SUM(NonTaxableSalesAmt)-SUM(CostOfSalesAmt), 'BOSCH - All', InvoiceDate from mas.ar_invoicehistorydetail
+join mas.ar_invoicehistoryheader on mas.ar_invoicehistorydetail.InvoiceNo=ar_invoicehistoryheader.InvoiceNo and mas.ar_invoicehistorydetail.HeaderSeqNo=mas.ar_invoicehistoryheader.HeaderSeqNo
+join mas.ci_item on mas.ar_invoicehistorydetail.ItemCode=mas.ci_item.ItemCode
+where InvoiceDate>='2014-06-16' and CI_Item.Category3<>'' and CI_Item.Category3 REGEXP '^BOSCH'
+group by InvoiceDate
+insert into SalespersonNoAR_InvoiceHistoryHeaderMargin (formulaValue, fieldValue, dateSelected)
+select SUM(TaxableSalesAmt)+SUM(NonTaxableSalesAmt)-SUM(CostOfSalesAmt), AR_InvoiceHistoryHeader.SalespersonNo, InvoiceDate from mas.ar_invoicehistoryheader
+where InvoiceDate>='2014-06-16' and AR_InvoiceHistoryHeader.SalespersonNo<>''  and AR_InvoiceHistoryHeader.SalespersonNo<>'0333'  and AR_InvoiceHistoryHeader.SalespersonNo<>'JAM' 
+group by InvoiceDate, AR_InvoiceHistoryHeader.SalespersonNo
+insert into UDF_STOREAR_InvoiceHistoryHeaderMargin (formulaValue, fieldValue, dateSelected)
+select SUM(TaxableSalesAmt)+SUM(NonTaxableSalesAmt)-SUM(CostOfSalesAmt), AR_InvoiceHistoryHeader.UDF_STORE, InvoiceDate from mas.ar_invoicehistoryheader
+where InvoiceDate>='2014-06-16' and AR_InvoiceHistoryHeader.UDF_STORE<>''  and AR_InvoiceHistoryHeader.UDF_STORE<>'206667'  and AR_InvoiceHistoryHeader.UDF_STORE<>'42'  and AR_InvoiceHistoryHeader.UDF_STORE<>'BELA'  and AR_InvoiceHistoryHeader.UDF_STORE<>'q' 
+group by InvoiceDate, AR_InvoiceHistoryHeader.UDF_STORE
+create table IF NOT EXISTS Category3CI_ItemTotalSales (formulaValue decimal(11,9), fieldValue VARCHAR(50), dateSelected DATE)
+update formula_list set newFormula='No' where formula_id=2
+create table IF NOT EXISTS SalespersonNoAR_InvoiceHistoryHeaderTotalSales (formulaValue decimal(11,9), fieldValue VARCHAR(50), dateSelected DATE)
+update formula_list set newFormula='No' where formula_id=2
+create table IF NOT EXISTS UDF_STOREAR_InvoiceHistoryHeaderTotalSales (formulaValue decimal(11,9), fieldValue VARCHAR(50), dateSelected DATE)
+update formula_list set newFormula='No' where formula_id=2
+insert into Category3CI_ItemTotalSales (formulaValue, fieldValue, dateSelected)
+select SUM(TaxableSalesAmt)+SUM(NonTaxableSalesAmt), CI_Item.Category3, InvoiceDate from mas.ar_invoicehistorydetail
+join mas.ar_invoicehistoryheader on mas.ar_invoicehistorydetail.InvoiceNo=ar_invoicehistoryheader.InvoiceNo and mas.ar_invoicehistorydetail.HeaderSeqNo=mas.ar_invoicehistoryheader.HeaderSeqNo
+join mas.ci_item on mas.ar_invoicehistorydetail.ItemCode=mas.ci_item.ItemCode
+where InvoiceDate>='2014-06-16' and CI_Item.Category3<>''  and CI_Item.Category3 NOT REGEXP '^FRIG'  and CI_Item.Category3 NOT REGEXP '^GE'  and CI_Item.Category3 NOT REGEXP '^MIELE'  and CI_Item.Category3 NOT REGEXP '^BOSCH' 
+group by InvoiceDate, CI_Item.Category3
+insert into Category3CI_ItemTotalSales (formulaValue, fieldValue, dateSelected)
+select SUM(TaxableSalesAmt)+SUM(NonTaxableSalesAmt), 'FRIG - All', InvoiceDate from mas.ar_invoicehistorydetail
+join mas.ar_invoicehistoryheader on mas.ar_invoicehistorydetail.InvoiceNo=ar_invoicehistoryheader.InvoiceNo and mas.ar_invoicehistorydetail.HeaderSeqNo=mas.ar_invoicehistoryheader.HeaderSeqNo
+join mas.ci_item on mas.ar_invoicehistorydetail.ItemCode=mas.ci_item.ItemCode
+where InvoiceDate>='2014-06-16' and CI_Item.Category3<>'' and CI_Item.Category3 REGEXP '^FRIG'
+group by InvoiceDate
+insert into Category3CI_ItemTotalSales (formulaValue, fieldValue, dateSelected)
+select SUM(TaxableSalesAmt)+SUM(NonTaxableSalesAmt), 'GE - All', InvoiceDate from mas.ar_invoicehistorydetail
+join mas.ar_invoicehistoryheader on mas.ar_invoicehistorydetail.InvoiceNo=ar_invoicehistoryheader.InvoiceNo and mas.ar_invoicehistorydetail.HeaderSeqNo=mas.ar_invoicehistoryheader.HeaderSeqNo
+join mas.ci_item on mas.ar_invoicehistorydetail.ItemCode=mas.ci_item.ItemCode
+where InvoiceDate>='2014-06-16' and CI_Item.Category3<>'' and CI_Item.Category3 REGEXP '^GE'
+group by InvoiceDate
+insert into Category3CI_ItemTotalSales (formulaValue, fieldValue, dateSelected)
+select SUM(TaxableSalesAmt)+SUM(NonTaxableSalesAmt), 'MIELE - All', InvoiceDate from mas.ar_invoicehistorydetail
+join mas.ar_invoicehistoryheader on mas.ar_invoicehistorydetail.InvoiceNo=ar_invoicehistoryheader.InvoiceNo and mas.ar_invoicehistorydetail.HeaderSeqNo=mas.ar_invoicehistoryheader.HeaderSeqNo
+join mas.ci_item on mas.ar_invoicehistorydetail.ItemCode=mas.ci_item.ItemCode
+where InvoiceDate>='2014-06-16' and CI_Item.Category3<>'' and CI_Item.Category3 REGEXP '^MIELE'
+group by InvoiceDate
+insert into Category3CI_ItemTotalSales (formulaValue, fieldValue, dateSelected)
+select SUM(TaxableSalesAmt)+SUM(NonTaxableSalesAmt), 'BOSCH - All', InvoiceDate from mas.ar_invoicehistorydetail
+join mas.ar_invoicehistoryheader on mas.ar_invoicehistorydetail.InvoiceNo=ar_invoicehistoryheader.InvoiceNo and mas.ar_invoicehistorydetail.HeaderSeqNo=mas.ar_invoicehistoryheader.HeaderSeqNo
+join mas.ci_item on mas.ar_invoicehistorydetail.ItemCode=mas.ci_item.ItemCode
+where InvoiceDate>='2014-06-16' and CI_Item.Category3<>'' and CI_Item.Category3 REGEXP '^BOSCH'
+group by InvoiceDate
+insert into SalespersonNoAR_InvoiceHistoryHeaderTotalSales (formulaValue, fieldValue, dateSelected)
+select SUM(TaxableSalesAmt)+SUM(NonTaxableSalesAmt), AR_InvoiceHistoryHeader.SalespersonNo, InvoiceDate from mas.ar_invoicehistoryheader
+where InvoiceDate>='2014-06-16' and AR_InvoiceHistoryHeader.SalespersonNo<>''  and AR_InvoiceHistoryHeader.SalespersonNo<>'0333'  and AR_InvoiceHistoryHeader.SalespersonNo<>'JAM' 
+group by InvoiceDate, AR_InvoiceHistoryHeader.SalespersonNo
+insert into UDF_STOREAR_InvoiceHistoryHeaderTotalSales (formulaValue, fieldValue, dateSelected)
+select SUM(TaxableSalesAmt)+SUM(NonTaxableSalesAmt), AR_InvoiceHistoryHeader.UDF_STORE, InvoiceDate from mas.ar_invoicehistoryheader
+where InvoiceDate>='2014-06-16' and AR_InvoiceHistoryHeader.UDF_STORE<>''  and AR_InvoiceHistoryHeader.UDF_STORE<>'206667'  and AR_InvoiceHistoryHeader.UDF_STORE<>'42'  and AR_InvoiceHistoryHeader.UDF_STORE<>'BELA'  and AR_InvoiceHistoryHeader.UDF_STORE<>'q' 
+group by InvoiceDate, AR_InvoiceHistoryHeader.UDF_STORE
+create table IF NOT EXISTS Category3CI_ItemNumberSold (formulaValue decimal(11,9), fieldValue VARCHAR(50), dateSelected DATE)
+update formula_list set newFormula='No' where formula_id=3
+create table IF NOT EXISTS SalespersonNoAR_InvoiceHistoryHeaderNumberSold (formulaValue decimal(11,9), fieldValue VARCHAR(50), dateSelected DATE)
+update formula_list set newFormula='No' where formula_id=3
+create table IF NOT EXISTS UDF_STOREAR_InvoiceHistoryHeaderNumberSold (formulaValue decimal(11,9), fieldValue VARCHAR(50), dateSelected DATE)
+update formula_list set newFormula='No' where formula_id=3
+insert into Category3CI_ItemNumberSold (formulaValue, fieldValue, dateSelected)
+select COUNT(InvoiceNo), CI_Item.Category3, InvoiceDate from mas.ar_invoicehistorydetail
+join mas.ar_invoicehistoryheader on mas.ar_invoicehistorydetail.InvoiceNo=ar_invoicehistoryheader.InvoiceNo and mas.ar_invoicehistorydetail.HeaderSeqNo=mas.ar_invoicehistoryheader.HeaderSeqNo
+join mas.ci_item on mas.ar_invoicehistorydetail.ItemCode=mas.ci_item.ItemCode
+where InvoiceDate>='2014-06-16' and CI_Item.Category3<>''  and CI_Item.Category3 NOT REGEXP '^FRIG'  and CI_Item.Category3 NOT REGEXP '^GE'  and CI_Item.Category3 NOT REGEXP '^MIELE'  and CI_Item.Category3 NOT REGEXP '^BOSCH' 
+group by InvoiceDate, CI_Item.Category3
+insert into Category3CI_ItemNumberSold (formulaValue, fieldValue, dateSelected)
+select COUNT(InvoiceNo), 'FRIG - All', InvoiceDate from mas.ar_invoicehistorydetail
+join mas.ar_invoicehistoryheader on mas.ar_invoicehistorydetail.InvoiceNo=ar_invoicehistoryheader.InvoiceNo and mas.ar_invoicehistorydetail.HeaderSeqNo=mas.ar_invoicehistoryheader.HeaderSeqNo
+join mas.ci_item on mas.ar_invoicehistorydetail.ItemCode=mas.ci_item.ItemCode
+where InvoiceDate>='2014-06-16' and CI_Item.Category3<>'' and CI_Item.Category3 REGEXP '^FRIG'
+group by InvoiceDate
+insert into Category3CI_ItemNumberSold (formulaValue, fieldValue, dateSelected)
+select COUNT(InvoiceNo), 'GE - All', InvoiceDate from mas.ar_invoicehistorydetail
+join mas.ar_invoicehistoryheader on mas.ar_invoicehistorydetail.InvoiceNo=ar_invoicehistoryheader.InvoiceNo and mas.ar_invoicehistorydetail.HeaderSeqNo=mas.ar_invoicehistoryheader.HeaderSeqNo
+join mas.ci_item on mas.ar_invoicehistorydetail.ItemCode=mas.ci_item.ItemCode
+where InvoiceDate>='2014-06-16' and CI_Item.Category3<>'' and CI_Item.Category3 REGEXP '^GE'
+group by InvoiceDate
+insert into Category3CI_ItemNumberSold (formulaValue, fieldValue, dateSelected)
+select COUNT(InvoiceNo), 'MIELE - All', InvoiceDate from mas.ar_invoicehistorydetail
+join mas.ar_invoicehistoryheader on mas.ar_invoicehistorydetail.InvoiceNo=ar_invoicehistoryheader.InvoiceNo and mas.ar_invoicehistorydetail.HeaderSeqNo=mas.ar_invoicehistoryheader.HeaderSeqNo
+join mas.ci_item on mas.ar_invoicehistorydetail.ItemCode=mas.ci_item.ItemCode
+where InvoiceDate>='2014-06-16' and CI_Item.Category3<>'' and CI_Item.Category3 REGEXP '^MIELE'
+group by InvoiceDate
+insert into Category3CI_ItemNumberSold (formulaValue, fieldValue, dateSelected)
+select COUNT(InvoiceNo), 'BOSCH - All', InvoiceDate from mas.ar_invoicehistorydetail
+join mas.ar_invoicehistoryheader on mas.ar_invoicehistorydetail.InvoiceNo=ar_invoicehistoryheader.InvoiceNo and mas.ar_invoicehistorydetail.HeaderSeqNo=mas.ar_invoicehistoryheader.HeaderSeqNo
+join mas.ci_item on mas.ar_invoicehistorydetail.ItemCode=mas.ci_item.ItemCode
+where InvoiceDate>='2014-06-16' and CI_Item.Category3<>'' and CI_Item.Category3 REGEXP '^BOSCH'
+group by InvoiceDate
+insert into SalespersonNoAR_InvoiceHistoryHeaderNumberSold (formulaValue, fieldValue, dateSelected)
+select COUNT(InvoiceNo), AR_InvoiceHistoryHeader.SalespersonNo, InvoiceDate from mas.ar_invoicehistoryheader
+where InvoiceDate>='2014-06-16' and AR_InvoiceHistoryHeader.SalespersonNo<>''  and AR_InvoiceHistoryHeader.SalespersonNo<>'0333'  and AR_InvoiceHistoryHeader.SalespersonNo<>'JAM' 
+group by InvoiceDate, AR_InvoiceHistoryHeader.SalespersonNo
+insert into UDF_STOREAR_InvoiceHistoryHeaderNumberSold (formulaValue, fieldValue, dateSelected)
+select COUNT(InvoiceNo), AR_InvoiceHistoryHeader.UDF_STORE, InvoiceDate from mas.ar_invoicehistoryheader
+where InvoiceDate>='2014-06-16' and AR_InvoiceHistoryHeader.UDF_STORE<>''  and AR_InvoiceHistoryHeader.UDF_STORE<>'206667'  and AR_InvoiceHistoryHeader.UDF_STORE<>'42'  and AR_InvoiceHistoryHeader.UDF_STORE<>'BELA'  and AR_InvoiceHistoryHeader.UDF_STORE<>'q' 
+group by InvoiceDate, AR_InvoiceHistoryHeader.UDF_STORE
+create table IF NOT EXISTS Category3CI_ItemPercentMargin (formulaValue decimal(11,9), fieldValue VARCHAR(50), dateSelected DATE)
+update formula_list set newFormula='No' where formula_id=4
+create table IF NOT EXISTS SalespersonNoAR_InvoiceHistoryHeaderPercentMargin (formulaValue decimal(11,9), fieldValue VARCHAR(50), dateSelected DATE)
+update formula_list set newFormula='No' where formula_id=4
+create table IF NOT EXISTS UDF_STOREAR_InvoiceHistoryHeaderPercentMargin (formulaValue decimal(11,9), fieldValue VARCHAR(50), dateSelected DATE)
+update formula_list set newFormula='No' where formula_id=4
+insert into Category3CI_ItemPercentMargin (formulaValue, fieldValue, dateSelected)
+select (SUM(TaxableSalesAmt)+SUM(NonTaxableSalesAmt)-SUM(CostOfSalesAmt))/(SUM(TaxableSalesAmt)+SUM(NonTaxableSalesAmt)), CI_Item.Category3, InvoiceDate from mas.ar_invoicehistorydetail
+join mas.ar_invoicehistoryheader on mas.ar_invoicehistorydetail.InvoiceNo=ar_invoicehistoryheader.InvoiceNo and mas.ar_invoicehistorydetail.HeaderSeqNo=mas.ar_invoicehistoryheader.HeaderSeqNo
+join mas.ci_item on mas.ar_invoicehistorydetail.ItemCode=mas.ci_item.ItemCode
+where InvoiceDate>='2014-06-16' and CI_Item.Category3<>''  and CI_Item.Category3 NOT REGEXP '^FRIG'  and CI_Item.Category3 NOT REGEXP '^GE'  and CI_Item.Category3 NOT REGEXP '^MIELE'  and CI_Item.Category3 NOT REGEXP '^BOSCH' 
+group by InvoiceDate, CI_Item.Category3
+insert into Category3CI_ItemPercentMargin (formulaValue, fieldValue, dateSelected)
+select (SUM(TaxableSalesAmt)+SUM(NonTaxableSalesAmt)-SUM(CostOfSalesAmt))/(SUM(TaxableSalesAmt)+SUM(NonTaxableSalesAmt)), 'FRIG - All', InvoiceDate from mas.ar_invoicehistorydetail
+join mas.ar_invoicehistoryheader on mas.ar_invoicehistorydetail.InvoiceNo=ar_invoicehistoryheader.InvoiceNo and mas.ar_invoicehistorydetail.HeaderSeqNo=mas.ar_invoicehistoryheader.HeaderSeqNo
+join mas.ci_item on mas.ar_invoicehistorydetail.ItemCode=mas.ci_item.ItemCode
+where InvoiceDate>='2014-06-16' and CI_Item.Category3<>'' and CI_Item.Category3 REGEXP '^FRIG'
+group by InvoiceDate
+insert into Category3CI_ItemPercentMargin (formulaValue, fieldValue, dateSelected)
+select (SUM(TaxableSalesAmt)+SUM(NonTaxableSalesAmt)-SUM(CostOfSalesAmt))/(SUM(TaxableSalesAmt)+SUM(NonTaxableSalesAmt)), 'GE - All', InvoiceDate from mas.ar_invoicehistorydetail
+join mas.ar_invoicehistoryheader on mas.ar_invoicehistorydetail.InvoiceNo=ar_invoicehistoryheader.InvoiceNo and mas.ar_invoicehistorydetail.HeaderSeqNo=mas.ar_invoicehistoryheader.HeaderSeqNo
+join mas.ci_item on mas.ar_invoicehistorydetail.ItemCode=mas.ci_item.ItemCode
+where InvoiceDate>='2014-06-16' and CI_Item.Category3<>'' and CI_Item.Category3 REGEXP '^GE'
+group by InvoiceDate
+insert into Category3CI_ItemPercentMargin (formulaValue, fieldValue, dateSelected)
+select (SUM(TaxableSalesAmt)+SUM(NonTaxableSalesAmt)-SUM(CostOfSalesAmt))/(SUM(TaxableSalesAmt)+SUM(NonTaxableSalesAmt)), 'MIELE - All', InvoiceDate from mas.ar_invoicehistorydetail
+join mas.ar_invoicehistoryheader on mas.ar_invoicehistorydetail.InvoiceNo=ar_invoicehistoryheader.InvoiceNo and mas.ar_invoicehistorydetail.HeaderSeqNo=mas.ar_invoicehistoryheader.HeaderSeqNo
+join mas.ci_item on mas.ar_invoicehistorydetail.ItemCode=mas.ci_item.ItemCode
+where InvoiceDate>='2014-06-16' and CI_Item.Category3<>'' and CI_Item.Category3 REGEXP '^MIELE'
+group by InvoiceDate
+insert into Category3CI_ItemPercentMargin (formulaValue, fieldValue, dateSelected)
+select (SUM(TaxableSalesAmt)+SUM(NonTaxableSalesAmt)-SUM(CostOfSalesAmt))/(SUM(TaxableSalesAmt)+SUM(NonTaxableSalesAmt)), 'BOSCH - All', InvoiceDate from mas.ar_invoicehistorydetail
+join mas.ar_invoicehistoryheader on mas.ar_invoicehistorydetail.InvoiceNo=ar_invoicehistoryheader.InvoiceNo and mas.ar_invoicehistorydetail.HeaderSeqNo=mas.ar_invoicehistoryheader.HeaderSeqNo
+join mas.ci_item on mas.ar_invoicehistorydetail.ItemCode=mas.ci_item.ItemCode
+where InvoiceDate>='2014-06-16' and CI_Item.Category3<>'' and CI_Item.Category3 REGEXP '^BOSCH'
+group by InvoiceDate
+insert into SalespersonNoAR_InvoiceHistoryHeaderPercentMargin (formulaValue, fieldValue, dateSelected)
+select (SUM(TaxableSalesAmt)+SUM(NonTaxableSalesAmt)-SUM(CostOfSalesAmt))/(SUM(TaxableSalesAmt)+SUM(NonTaxableSalesAmt)), AR_InvoiceHistoryHeader.SalespersonNo, InvoiceDate from mas.ar_invoicehistoryheader
+where InvoiceDate>='2014-06-16' and AR_InvoiceHistoryHeader.SalespersonNo<>''  and AR_InvoiceHistoryHeader.SalespersonNo<>'0333'  and AR_InvoiceHistoryHeader.SalespersonNo<>'JAM' 
+group by InvoiceDate, AR_InvoiceHistoryHeader.SalespersonNo
+insert into UDF_STOREAR_InvoiceHistoryHeaderPercentMargin (formulaValue, fieldValue, dateSelected)
+select (SUM(TaxableSalesAmt)+SUM(NonTaxableSalesAmt)-SUM(CostOfSalesAmt))/(SUM(TaxableSalesAmt)+SUM(NonTaxableSalesAmt)), AR_InvoiceHistoryHeader.UDF_STORE, InvoiceDate from mas.ar_invoicehistoryheader
+where InvoiceDate>='2014-06-16' and AR_InvoiceHistoryHeader.UDF_STORE<>''  and AR_InvoiceHistoryHeader.UDF_STORE<>'206667'  and AR_InvoiceHistoryHeader.UDF_STORE<>'42'  and AR_InvoiceHistoryHeader.UDF_STORE<>'BELA'  and AR_InvoiceHistoryHeader.UDF_STORE<>'q' 
+group by InvoiceDate, AR_InvoiceHistoryHeader.UDF_STORE
