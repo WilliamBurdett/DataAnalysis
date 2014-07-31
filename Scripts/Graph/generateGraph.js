@@ -97,5 +97,13 @@ function chooseGraph(){
 }
 
 function generateGraph(){
-	document.getElementById('formula_id');
+	document.getElementById('form_formula_id').value = getSelectedValue('currentFormulas1');
+	document.getElementById('form_formula_id2').value = getSelectedValue('currentFormulas2');
+	document.getElementById('form_formula_id3').value = getSelectedValue('currentFormulas3');
+	document.getElementById('form_startDate').value = getSelectedValue('currentFormulas1');
+	document.getElementById('form_endDate').value = getSelectedValue('currentFormulas1');
+	document.getElementById('form_type').value = getSelectedValue('currentFormulas1');
+	document.getElementById('form_maxFields').value = getSelectedValue('currentFormulas1');
+	document.getElementById('form_interval').value = getSelectedValue('currentFormulas1');
+	document.getElementById('form_table_id').value = getSelectedValue('currentFields');
 }
