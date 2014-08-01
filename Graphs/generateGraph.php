@@ -149,7 +149,7 @@
 		<input type="button" class="inlineBlockDiv" value="Generate Graph" onclick="generateGraph();">
 	</div>
 </div>
-<form>
+<form method="get" id="form" action="">
 <input type="hidden" name="formula_id" id="form_formula_id" />
 <input type="hidden" name="formula_id2" id="form_formula_id2" />
 <input type="hidden" name="formula_id3" id="form_formula_id3" />

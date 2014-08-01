@@ -100,10 +100,27 @@ function generateGraph(){
 	document.getElementById('form_formula_id').value = getSelectedValue('currentFormulas1');
 	document.getElementById('form_formula_id2').value = getSelectedValue('currentFormulas2');
 	document.getElementById('form_formula_id3').value = getSelectedValue('currentFormulas3');
-	document.getElementById('form_startDate').value = getSelectedValue('currentFormulas1');
-	document.getElementById('form_endDate').value = getSelectedValue('currentFormulas1');
-	document.getElementById('form_type').value = getSelectedValue('currentFormulas1');
-	document.getElementById('form_maxFields').value = getSelectedValue('currentFormulas1');
-	document.getElementById('form_interval').value = getSelectedValue('currentFormulas1');
+	document.getElementById('form_startDate').value = document.getElementById('startDate').value;
+	document.getElementById('form_endDate').value = document.getElementById('endDate').value;
+	document.getElementById('form_maxFields').value = document.getElementById('maxFields').value;
 	document.getElementById('form_table_id').value = getSelectedValue('currentFields');
+	if(document.getElementById('typeRadioTotal').checked){
+		document.getElementById('form_type').value = "Total";
+	}
+	else{
+		document.getElementById('form_type').value = "Average";
+	}
+	if(document.getElementById('intervalRadioMonth').checked){
+		document.getElementById('form_interval').value = "Month";
+	}
+	else if(document.getElementById('intervalRadioWeek').checked){
+		document.getElementById('form_interval').value = "Week";
+	}
+	else{
+		document.getElementById('form_interval').value = "Day";
+	}
+	var graph = getSelectedValue("currentGraphs");
+	var form = document.getElementById('form');
+	form.action="/ALANew/DataAnalysis/Graphs/" + graph + "Graph.php";
+	form.submit();
 }
